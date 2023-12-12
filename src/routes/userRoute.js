@@ -16,7 +16,7 @@ router
         .get(userController.listenAllUsers);
     
 router
-    .route("/id_user")
+    .route("/:user_id")
     .all(jwtMiddleware.verifyToken)
         .put(userController.updateUser)
         .delete(userController.deleteUser);

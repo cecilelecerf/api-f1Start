@@ -1,6 +1,6 @@
-const express = require("express");
-const router = express.Router();
-
-router
-    .route("/user_id/timer")
-        .post(jwtMiddleware.verifyToken, timerController.createTimer)
+module.exports = (app) => {
+    const timerController = require("../controllers/timerController")
+    
+    app.route("/:id_user")
+    .post(timerController.createTimer);
+}

@@ -1,9 +1,9 @@
 const Timer = require("../models/timerModel")
 const User = require("../models/userModel")
 
-exports.createTimer = async(req, res)=>{
+exports.createTimer = async (req, res) => {
     try{
-        const newTimer = new Timer(req.params.id_user, req.body);
+        const newTimer = new Timer(req.params.user_id, req.body);
         if(new User.findById(newTimer.user_id))
             nullifiable()
         const timer = await newTimer.save();

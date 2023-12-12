@@ -11,6 +11,11 @@ app.use(express.json());
 const usersRoute = require("./routes/userRoute")
 app.use("/users", usersRoute)
 
+const timerRoute = require("./routes/timerRoute")
+// app.use("/timer", timerRoute)
+timerRoute(app);
+
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
