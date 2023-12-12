@@ -9,16 +9,16 @@ router
 
 router
     .route("/login")
-        .post(userController.userLogin)
+        .post(userController.userLogin);
 
 router
     .route("/")
-        .get(userController.listenAllUsers)
+        .get(userController.listenAllUsers);
     
 router
     .route("/id_user")
-        .all(jwtMiddleware.verifyToken)
-        .update(userController.updateUser)
-        .delete(userController.deleteUser)
+    .all(jwtMiddleware.verifyToken)
+        .put(userController.updateUser)
+        .delete(userController.deleteUser);
 
 module.exports = router;
