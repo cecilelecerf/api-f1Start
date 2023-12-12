@@ -15,23 +15,21 @@ exports.userRegister = async(req, res)=>{
 exports.userLogin= async (req,res)=>{
     try {
         const user = await User.findOne({email : req.body.email});
-        // user n'existe pas
         if(!user){
-            console.log(error);
-            res.status(500).json({message : "utilisateur non trouvé"});
+            res.status(500).json({message : "User not found"});
             return;
         }
         if(user.email === req.body.email && user.password === req.body.password){
             const userData = {
                 id : user._id,
                 email : user.email,
-                role : "admin"
+                role : user.role
             };
             const token = await jwt.sign(userData, process.env.JWT_KEY, {expiresIn : "10h"});
             res.status(200).json({token})
         }
         else {
-            res.status(401).json({message: "Email ou mot de passe incorrect"});
+            res.status(401).json({message: "Email or password incorrect"});
         }                
     } catch(error){
         console.log(error);
