@@ -8,6 +8,9 @@ mongoose.connect('mongodb://mongo/apinode')
 app.use(express.urlencoded());
 app.use(express.json());
 
+const usersRoute = require("./routes/userRoute")
+app.use("/users", usersRoute)
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
