@@ -1,6 +1,6 @@
 const User = require ("../models/userModel");
 const jwt = require("jsonwebtoken");
-exports.nullifiable = () => {
+nullifiable = () => {
     res.status(404);
     res.json({message: "User not found"})
     res.end();
