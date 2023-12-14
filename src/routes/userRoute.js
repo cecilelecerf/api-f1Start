@@ -14,7 +14,8 @@ module.exports = (app) => {
     app.route("/users")
         .get(userController.listenAllUsers);
     app.route("/users/:user_id")
-        .put(userController.updateUser)
-        .delete(userController.deleteUser);
+        .all(jwtMiddleware.verifyToken)
+            .put(userController.updateUser)
+            .delete(userController.deleteUser);
 
 }
