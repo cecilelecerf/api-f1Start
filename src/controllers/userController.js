@@ -2,13 +2,6 @@ const User = require ("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
-const someOtherPlaintextPassword = 'not_bacon';
-exports.nullifiable = () => {
-    res.status(404);
-    res.json({message: "User not found"})
-    res.end();
-}
 
 exports.hashPassword = async (password) => {
     try {
@@ -70,21 +63,27 @@ exports.listenAllUsers = async(_req, res) =>{
 
 exports.listenSingleUser = async (req,res) => {
     try{
-        const user = await Post.findById(req.params.id_post);
-        if(user===null)
-            this.nullifiable();
-        res.status(200).res.json(user);
+        const user = await User.findById(req.params.user_id);
+        if(user===null){
+            res.status(404);
+            res.json({message: "User not found"});
+            res.end();
+        }
+        res.status(200).json(user);
     } catch(error){
         console.log(error);
-        res.status(500).res.json({message : "Error server."})
+        res.status(500).json({message : "Error server."})
     }
 }
 
 exports.updateUser = async(req, res)=>{
     try{
-        const user = await User.findByIdAndUpdate(req.params.id_user, req.body, {new: true});
-        if(user===null)
-            this.nullifiable();
+        const user = await User.findByIdAndUpdate(req.params.user_id, req.body, {new: true});
+        if(user===null){
+            res.status(404);
+            res.json({message: "User not found"});
+            res.end();
+        }
         res.status(200).json({user})
     } catch(error){
         console.log(error);
@@ -94,7 +93,7 @@ exports.updateUser = async(req, res)=>{
 
 exports.deleteUser = async(req, res)=>{
     try{
-        await User.findByIdAndDelete(req.params.id_user);
+        await User.findByIdAndDelete(req.params.user_id);
         res.status(204).json({message: "User delete"})
     } catch (error){
         console.log(error);
