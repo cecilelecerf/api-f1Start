@@ -10,11 +10,32 @@ exports.createTimer = async (req, res) => {
             res.status(404);
             res.json({message: "User not found"})
             res.end();
+            return;
         }
-        const timer = await newTimer.save();
-        res.status(201).json({timer});
+        await newTimer.save();
+        res.status(201).json({newTimer});
     } catch (error){
         console.log(error)
         res.status(500).json({message: "Error server."})
+    }
+}
+
+exports.averageTimer = async (req, res)=> {
+    try{
+
+        const { user_id } = req.params
+        const allTimer = await Timer.find({user_id})
+        // console.log(allTimer)
+        let sumAllTime = 0
+        allTimer.map((timer)=>(
+            sumAllTime += timer.time
+        ))
+        average = sumAllTime / allTimer.length
+        res.status(200).json({average})
+
+    }catch (error){
+        console.log(error)
+        res.status(500).json({message : "Error server."})
+
     }
 }
