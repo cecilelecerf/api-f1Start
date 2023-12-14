@@ -1,4 +1,6 @@
 const express = require('express');
+const swaggerDocument = require("./swagger.json");
+const swaggerui = require("swagger-ui-express");
 const app = express();
 const port = 3003;
 
@@ -17,6 +19,7 @@ const timerRoute = require("./routes/timerRoute")
 timerRoute(app);
 
 
+app.use("/api-docs", swaggerui.serve, swaggerui.setup(swaggerDocument))
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
