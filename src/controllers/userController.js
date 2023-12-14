@@ -78,7 +78,9 @@ exports.listenSingleUser = async (req,res) => {
 
 exports.updateUser = async(req, res)=>{
     try{
-        const user = await User.findByIdAndUpdate(req.params.user_id, req.body, {new: true});
+        const user = await User.findById(req.params.user_id);
+        user.password = await this.hashPassword(user.password);
+        await User.findByIdAndUpdate(req.params.user_id, user, {new: true});
         if(user===null){
             res.status(404);
             res.json({message: "User not found"});
@@ -100,3 +102,4 @@ exports.deleteUser = async(req, res)=>{
         res.status(500).json({message : "Error server."})
     }
 }
+
