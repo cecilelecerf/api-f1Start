@@ -8,8 +8,9 @@ mongoose.connect('mongodb://mongo/apinode')
 app.use(express.urlencoded());
 app.use(express.json());
 
-const usersRoute = require("./routes/userRoute")
-app.use("/users", usersRoute)
+const userRoute = require("./routes/userRoute")
+// app.use("/users", usersRoute)
+userRoute(app);
 
 const timerRoute = require("./routes/timerRoute")
 // app.use("/timer", timerRoute)

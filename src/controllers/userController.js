@@ -1,15 +1,29 @@
 const User = require ("../models/userModel");
 const jwt = require("jsonwebtoken");
-nullifiable = () => {
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
+exports.nullifiable = () => {
     res.status(404);
     res.json({message: "User not found"})
     res.end();
 }
 
+exports.hashPassword = async (password) => {
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        return hashedPassword;
+    } catch (error) {
+        throw error;
+    }
+};
+
 exports.userRegister = async(req, res)=>{
     try{
         let newUser = new User(req.body);
-        let user = await newUser.save();
+        newUser.password = await this.hashPassword(newUser.password);
+        const user = await newUser.save();
         res.status(201).json({message: `User crée ${user.email}`})
     } catch (error){
         console.log(error);
@@ -24,7 +38,8 @@ exports.userLogin= async (req,res)=>{
             res.status(500).json({message : "User not found"});
             return;
         }
-        if(user.email === req.body.email && user.password === req.body.password){
+        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+        if(user.email === req.body.email && passwordMatch){
             const userData = {
                 id : user._id,
                 email : user.email,
@@ -45,6 +60,7 @@ exports.userLogin= async (req,res)=>{
 exports.listenAllUsers = async(_req, res) =>{
     try{
         const users = await User.find({})
+        console.log(users);
         res.status(200).json({users})
     } catch(error){
         console.log(error);
@@ -56,7 +72,7 @@ exports.listenSingleUser = async (req,res) => {
     try{
         const user = await Post.findById(req.params.id_post);
         if(user===null)
-            nullifiable();
+            this.nullifiable();
         res.status(200).res.json(user);
     } catch(error){
         console.log(error);
@@ -68,7 +84,7 @@ exports.updateUser = async(req, res)=>{
     try{
         const user = await User.findByIdAndUpdate(req.params.id_user, req.body, {new: true});
         if(user===null)
-            nullifiable();
+            this.nullifiable();
         res.status(200).json({user})
     } catch(error){
         console.log(error);
