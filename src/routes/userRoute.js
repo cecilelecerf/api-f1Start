@@ -1,24 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const userController = require('../controllers/userController');
 const jwtMiddleware = require("../middlwares/jwtMiddlware")
 
-router
-    .route("/register")
-        .post(userController.userRegister);
 
-router
-    .route("/login")
-        .post(userController.userLogin);
-
-router
-    .route("/")
-        .get(userController.listenAllUsers);
+module.exports = (app) => {
+    const userController = require("../controllers/userController")
     
-router
-    .route("/:user_id")
-    .all(jwtMiddleware.verifyToken)
-        .put(userController.updateUser)
-        .delete(userController.deleteUser);
+    app.route("/users/register")
+        .post(userController.userRegister);
+    app.route("/users/login")
+        .post(userController.userLogin);
+    app.route("/users")
+        .get(userController.listenAllUsers);
+    app.route("/users/:user_id")
+        .all(jwtMiddleware.verifyToken)
+            .get(userController.listenSingleUser)
+            .put(userController.updateUser)
+            .delete(userController.deleteUser);
 
-module.exports = router;
+}
